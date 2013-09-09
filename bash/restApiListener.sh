@@ -18,18 +18,16 @@
 # @MarcelBirkner
 # 
 
-USER=user
-PASSWORD=password
-JENKINS_SERVER=http://<jenkins>:8080/job/
-JOB_NAME=<job name>
-DEVICE_NO=<USB device number>
+JENKINS_SERVER="http://cob-jenkins-server:8080/job/"
+JOB_NAME="ipa320__prio_build"
+DEVICE_NO="/dev"
 
 # Methods for controlling the device (2=blue, 1=yellow, 0=red)
 lightOn() {
-  clewarecontrol -c 1 -b -d $DEVICE_NO -as $1 1 2>&1 
+  clewarecontrol -c 1 -d $DEVICE_NO -as $1 1 2>&1 
 }
 lightOff() {
-  clewarecontrol -c 1 -b -d $DEVICE_NO -as $1 0 2>&1 
+  clewarecontrol -c 1 -d $DEVICE_NO -as $1 0 2>&1 
 }
 allOff() {
   lightOff 0;
@@ -38,11 +36,11 @@ allOff() {
 }
 
 while true; do 
-  color=`curl -silent -u $USER:$PASSWORD $JENKINS_SERVER$JOB_NAME/api/json?pretty=true | grep color `
+  color=`curl -silent $JENKINS_SERVER$JOB_NAME/api/json?pretty=true | grep color `
   state=`echo $color | sed 's/\"//g' | sed 's/,//g' | awk '{print $3}'` 
   echo $state;  
   case $state in 
-    red)          echo "State: $state"; allOff; lightOn 0;;
+    red)          echo "---------->State: $state"; allOff; lightOn 0;;
     yellow)       echo "State: $state"; allOff; lightOn 1;;
     blue)         echo "State: $state"; allOff; lightOn 2;;
     red_anime)    echo "State: $state"; allOff; sleep 1; lightOn 0; sleep 1; lightOff 0; sleep 1; lightOn 0;;
