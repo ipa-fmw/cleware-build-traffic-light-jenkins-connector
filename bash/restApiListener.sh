@@ -18,8 +18,8 @@
 # @MarcelBirkner
 # 
 
-JENKINS_SERVER="http://cob-jenkins-server:8080/job/"
-JOB_NAME="ipa320__prio_build"
+JENKINS_SERVER="http://fmw-xps:8080/job/"
+JOB_NAME="my_test_job"
 DEVICE_NO="/dev"
 
 # Methods for controlling the device (2=blue, 1=yellow, 0=red)
