@@ -20,6 +20,8 @@
 
 JENKINS_SERVER="http://fmw-xps:8080/job/"
 JOB_NAME="my_test_job"
+#JENKINS_URL=$JENKINS_SERVER$JOB_NAME
+JENKINS_URL=http://localhost:8080/view/my_view
 DEVICE_NO="/dev"
 
 # Methods for controlling the device (2=blue, 1=yellow, 0=red)
@@ -36,9 +38,10 @@ allOff() {
 }
 
 while true; do 
-  color=`curl -silent $JENKINS_SERVER$JOB_NAME/api/json?pretty=true | grep color `
+  color=`curl -silent $JENKINS_URL/api/json?pretty=true | grep color `
+  echo $color
   state=`echo $color | sed 's/\"//g' | sed 's/,//g' | awk '{print $3}'` 
-  echo $state;  
+  echo $state;
   case $state in 
     red)          echo "---------->State: $state"; allOff; lightOn 0;;
     yellow)       echo "State: $state"; allOff; lightOn 1;;
